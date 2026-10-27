@@ -5,3 +5,6 @@ backend/.pgdata/
 *.log
 *.tsbuildinfo
 .claude/
+.vercel
+.agents/
+skills-lock.json

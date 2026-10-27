@@ -6,3 +6,5 @@ backend/.pgdata
 .env
 **/.env
 *.log
+.agents
+skills-lock.json

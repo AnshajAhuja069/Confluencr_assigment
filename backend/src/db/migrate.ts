@@ -44,7 +44,9 @@ export async function migrate(connectionString: string, log = console.log): Prom
 }
 
 if (require.main === module) {
-  migrate(config.databaseUrl)
+  // Session-level advisory locks need a direct connection, not a transaction-mode pooler
+  // (Neon exposes the direct one as DATABASE_URL_UNPOOLED).
+  migrate(process.env.DATABASE_URL_UNPOOLED ?? config.databaseUrl)
     .then(() => console.log('migrations up to date'))
     .catch((err) => {
       console.error('migration failed:', err.message);

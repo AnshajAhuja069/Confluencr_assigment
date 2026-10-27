@@ -1,6 +1,8 @@
 # Transaction Ledger
 
 > **Full Stack Developer Assessment for [Confluencr](https://confluencr.com)** · built by **Anshaj**
+>
+> **Live demo:** https://confluencr-ledger.vercel.app · **API docs:** https://confluencr-ledger.vercel.app/docs/
 
 Hi! 👋 This is my submission for Confluencr's *Transaction Ledger API* assignment. People can open
 accounts, record credits and debits, check their balance, browse a filterable, paginated history and send
@@ -124,6 +126,18 @@ The suite migrates `ledger_test` automatically and truncates it before each test
 cd backend && npm run build && npm start
 cd frontend && npm run build      # static files in frontend/dist
 ```
+
+### Deployment (Vercel + Neon)
+
+The live demo runs on Vercel with a Neon Postgres database:
+
+- [`vercel.json`](vercel.json) builds the React app into static files (`frontend/dist`) and serves the
+  Express app as one serverless function ([`api/index.ts`](api/index.ts)). `/api/*`, `/docs`,
+  `/openapi.json` and `/health` are routed to the function; every other path falls back to the SPA.
+- Each build runs `npm run vercel-build` in `backend`: it applies migrations over Neon's direct
+  connection (`DATABASE_URL_UNPOOLED`) and seeds the demo data only if the database is empty.
+- At runtime the API uses the pooled `DATABASE_URL` with a small connection pool per instance.
+- `DATABASE_URL` / `DATABASE_URL_UNPOOLED` are provided by the Neon integration in Vercel.
 
 ---
 
