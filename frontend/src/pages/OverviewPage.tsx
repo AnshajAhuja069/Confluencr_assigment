@@ -87,7 +87,7 @@ export default function OverviewPage() {
         <div className="row" style={{ flexWrap: 'wrap' }}>
           <Link to="/accounts" className="btn primary">Explore the accounts →</Link>
           <Link to="/transfer" className="btn ghost">Try a transfer</Link>
-          <a href="http://localhost:4000/docs" target="_blank" rel="noreferrer" className="btn ghost">Open API docs ↗</a>
+          <a href="/docs/" target="_blank" rel="noreferrer" className="btn ghost">Open API docs ↗</a>
         </div>
       </section>
 

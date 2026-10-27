@@ -29,7 +29,7 @@ export default function App() {
             <NavLink to="/" end>Overview</NavLink>
             <NavLink to="/accounts">Accounts</NavLink>
             <NavLink to="/transfer">Transfer</NavLink>
-            <a href="http://localhost:4000/docs" target="_blank" rel="noreferrer">API docs ↗</a>
+            <a href="/docs/" target="_blank" rel="noreferrer">API docs ↗</a>
           </nav>
         </header>
 

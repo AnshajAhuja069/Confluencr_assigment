@@ -4,6 +4,7 @@
  *
  *   npm run seed            # only if the database is empty
  *   npm run seed -- --reset # wipe accounts/transactions/transfers first
+ *   npm run seed -- --if-empty # seed only if empty, otherwise exit quietly (used by deploys)
  *
  * Everything is written in one DB transaction. Debits that would overdraw are
  * skipped, and balances are recomputed from the ledger at the end, so the
@@ -125,16 +126,20 @@ function buildEvents(start: Date): Event[] {
   return events.sort((a, b) => a.at.getTime() - b.at.getTime());
 }
 
-async function seed(reset: boolean) {
+async function seed(mode: 'default' | 'reset' | 'if-empty') {
   const start = new Date(Date.now() - HISTORY_DAYS * DAY);
   start.setHours(0, 0, 0, 0);
 
   await withTransaction(async (client) => {
-    if (reset) {
+    if (mode === 'reset') {
       await client.query('TRUNCATE transactions, transfers, accounts RESTART IDENTITY CASCADE');
     } else {
       const { rows } = await client.query<{ n: number }>('SELECT count(*) AS n FROM accounts');
       if (rows[0].n > 0) {
+        if (mode === 'if-empty') {
+          console.log('database already has accounts — skipping seed');
+          return;
+        }
         throw new Error('database already has accounts — run `npm run seed -- --reset` to wipe and reseed');
       }
     }
@@ -195,7 +200,7 @@ async function seed(reset: boolean) {
   });
 }
 
-seed(process.argv.includes('--reset'))
+seed(process.argv.includes('--reset') ? 'reset' : process.argv.includes('--if-empty') ? 'if-empty' : 'default')
   .catch((err) => {
     console.error('seed failed:', err.message);
     process.exitCode = 1;

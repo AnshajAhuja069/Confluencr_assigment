@@ -50,7 +50,7 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
       headers: init?.body ? { 'Content-Type': 'application/json' } : undefined,
     });
   } catch {
-    throw new ApiError(0, 'NETWORK_ERROR', 'Could not reach the API. Is the backend running on port 4000?');
+    throw new ApiError(0, 'NETWORK_ERROR', 'Could not reach the API. Check your connection (locally: is the backend running on port 4000?)');
   }
   const body = await res.json().catch(() => null);
   if (!res.ok) {

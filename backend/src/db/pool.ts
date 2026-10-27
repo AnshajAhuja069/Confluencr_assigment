@@ -8,4 +8,5 @@ types.setTypeParser(1700, (value) => Number(value));
 // BIGINT (oid 20) is only used for counts / sequence numbers.
 types.setTypeParser(20, (value) => Number(value));
 
-export const pool = new Pool({ connectionString: config.databaseUrl, max: 20 });
+// Serverless instances each get their own pool, so keep it small there.
+export const pool = new Pool({ connectionString: config.databaseUrl, max: process.env.VERCEL ? 5 : 20 });
